@@ -22,6 +22,7 @@ export const Loading: FC<Props> = ({ setLoading }) => {
       } catch (error) {
         await handleLogout();
       } finally {
+        //teste melhor isso aqui no ios
         setLoading(false);
       }
     })();
@@ -31,8 +32,8 @@ export const Loading: FC<Props> = ({ setLoading }) => {
     <SafeAreaView className="bg-background-primary items-center justify-center flex-1">
       <>
         <Image
-          className="h-[48px] w-[255px]"
           source={require("@/assets/Logo.png")}
+          className="h-[48px] w-[255px]"
         />
         <ActivityIndicator color={colors.white} className="mt-20" />
       </>
