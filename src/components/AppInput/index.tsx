@@ -1,3 +1,7 @@
+import { colors } from "@/shared/colors";
+import { MaterialIcons } from "@expo/vector-icons";
+import clsx from "clsx";
+import { useRef, useState } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import {
   Text,
@@ -6,10 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { colors } from "@/shared/colors";
-import { useRef, useState } from "react";
-import clsx from "clsx";
+import { ErrorMessage } from "../ErrorMessage";
 
 interface AppInputParams<T extends FieldValues> extends TextInputProps {
   control: Control<T>;
@@ -23,9 +24,11 @@ export const AppInput = <T extends FieldValues>({
   name,
   lable,
   leftIconName,
+  secureTextEntry,
   ...rest
 }: AppInputParams<T>) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [showText, setShowText] = useState(secureTextEntry);
   const inputRef = useRef<TextInput>(null);
 
   const checkFocus = () => {
@@ -38,7 +41,7 @@ export const AppInput = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, value } }) => {
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
         return (
           <View className="w-full mt-4">
             {lable && (
@@ -68,10 +71,24 @@ export const AppInput = <T extends FieldValues>({
                 className="flex-1 text-base text-gray-500"
                 onFocus={checkFocus}
                 onEndEditing={checkFocus}
+                secureTextEntry={showText}
                 ref={inputRef}
                 {...rest}
               />
+
+              {secureTextEntry && (
+                <TouchableOpacity
+                  onPress={() => setShowText((value) => !value)}
+                >
+                  <MaterialIcons
+                    name={showText ? "visibility" : "visibility-off"}
+                    color={colors.gray[600]}
+                    size={24}
+                  />
+                </TouchableOpacity>
+              )}
             </TouchableOpacity>
+            {error && <ErrorMessage>{error.message}</ErrorMessage>}
           </View>
         );
       }}

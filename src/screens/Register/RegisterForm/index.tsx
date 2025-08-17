@@ -7,20 +7,24 @@ import { Text, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
 
-export interface FormLoginParams {
+export interface FormRegisterParams {
   email: string;
+  name: string;
   password: string;
+  confirmPassword: string;
 }
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<FormLoginParams>({
+  } = useForm<FormRegisterParams>({
     defaultValues: {
       email: "",
+      name: "",
       password: "",
+      confirmPassword: "",
     },
     resolver: yupResolver(schema),
   });
@@ -33,11 +37,20 @@ export const LoginForm = () => {
     <>
       <AppInput
         control={control}
+        name="name"
+        placeholder="Seu nome"
+        lable="NOME"
+        leftIconName="person"
+      />
+
+      <AppInput
+        control={control}
         name="email"
         lable="EMAIL"
-        placeholder="mail@example.br"
         leftIconName="mail-outline"
+        placeholder="mail@example.br"
       />
+
       <AppInput
         control={control}
         name="password"
@@ -47,21 +60,30 @@ export const LoginForm = () => {
         secureTextEntry
       />
 
+      <AppInput
+        control={control}
+        name="confirmPassword"
+        lable="SENHA"
+        leftIconName="lock-outline"
+        placeholder="Confirme sua senha"
+        secureTextEntry
+      />
+
       <View className="flex-1 justify-between mt-8 mb-6 min-h-[250px]">
         <AppButton onPress={handleSubmit(onSubmit)} iconName="arrow-forward">
-          Login
+          Cadastrar
         </AppButton>
 
         <View>
           <Text className="mb-6 text-gray-300 text-base">
-            Ainda não possui uma conta?
+            Já possui uma conta?
           </Text>
           <AppButton
-            onPress={() => navigation.navigate("Register")}
+            onPress={() => navigation.navigate("Login")}
             iconName="arrow-forward"
             mode="outline"
           >
-            Cadastrar
+            Acessar
           </AppButton>
         </View>
       </View>
